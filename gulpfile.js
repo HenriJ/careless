@@ -63,7 +63,7 @@ gulp.task('clean', function(cb) {
   del(['dist/*'], cb);
 });
 
-gulp.task('modulize', function() {
+gulp.task('modulize', ['careless'], function() {
   return gulp.src('dist/careless/index.js')
     .pipe(gulp.dest(''));
 });

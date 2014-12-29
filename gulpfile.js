@@ -55,12 +55,17 @@ gulp.task('examples', ['careless'], function() {
   var module_careless = gulp.src('dist/careless/**/*')
   .pipe(gulp.dest('dist/node_modules/careless/'));
 
-  return merge(ressources, scripts);
+  return merge(ressources, scripts, module_careless);
   
 });
 
 gulp.task('clean', function(cb) {
   del(['dist/*'], cb);
+});
+
+gulp.task('modulize', function() {
+  return gulp.src('dist/careless/index.js')
+    .pipe(gulp.dest(''));
 });
 
 gulp.task('default', ['careless', 'examples']);

@@ -1,7 +1,7 @@
 {
   "name": "careless",
   "description": "A react fork for static XML generation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [
     "react",
     "jsx",
@@ -34,5 +34,9 @@
   "preferGlobal": true,
   "commonerConfig": {
     "version": 4
+  },
+  "scripts" :
+  {
+    "prepublish" : "gulp modulize"
   }
 }

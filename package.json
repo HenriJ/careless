@@ -1,0 +1,38 @@
+{
+  "name": "careless",
+  "description": "A react fork for static XML generation",
+  "version": "0.0.1",
+  "keywords": [
+    "react",
+    "jsx",
+    "transformer",
+    "careless"
+  ],
+  "license": "BSD-3-Clause",
+  "bin": {
+    "jsxx": "./bin/jsxx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebook/react"
+  },
+  "dependencies": {
+    "commoner": "^0.10.0",
+    "jstransform": "^8.0.0",
+    "pretty-data": "^0.40.0"
+  },
+  "devDependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "merge-stream": "^0.1.6",
+    "through2": "^0.6.3",
+    "vinyl-source-stream": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "preferGlobal": true,
+  "commonerConfig": {
+    "version": 4
+  }
+}

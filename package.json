@@ -37,6 +37,6 @@
   },
   "scripts" :
   {
-    "prepublish" : "gulp modulize"
+    "prepublish" : "gulp"
   }
 }

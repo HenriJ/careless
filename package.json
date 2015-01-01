@@ -1,7 +1,7 @@
 {
   "name": "careless",
   "description": "A jsx/react fork for static XML generation",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [
     "react",
     "jsx",
@@ -19,13 +19,13 @@
   "dependencies": {
     "commoner": "^0.10.0",
     "jstransform": "^8.0.0",
-    "pretty-data": "^0.40.0"
+    "pretty-data": "^0.40.0",
+    "through2": "^0.6.3",
   },
   "devDependencies": {
     "del": "^1.1.1",
     "gulp": "^3.8.10",
     "merge-stream": "^0.1.6",
-    "through2": "^0.6.3",
     "vinyl-source-stream": "^1.0.0"
   },
   "engines": {

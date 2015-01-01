@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var merge = require('merge-stream');
 var through = require('through2');
-var source = require('vinyl-source-stream')
+var source = require('vinyl-source-stream');
 var del = require('del');
 
 var transform = require('./main').transform;

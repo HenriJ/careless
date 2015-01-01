@@ -1,3 +1,7 @@
+var through = require('through2');
+
+var transform = require('../../main').transform;
+
 var JSXX_DEFAULT_OPTIONS = {
   harmony: true,
   sourceMap: false,

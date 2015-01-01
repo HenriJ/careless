@@ -25,7 +25,8 @@ build/Release
 .lock-wscript
 .idea
 
-dist
+dist/*
+!dist/careless
 
 /src/examples/perso-*
 

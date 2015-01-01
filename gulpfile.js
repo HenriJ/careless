@@ -12,7 +12,7 @@ var JSXX_OPTIONS = {
   harmony: true,
   sourceMap: false,
   stripTypes: true
-}
+};
 
 function jsxxify() {
 
@@ -61,11 +61,6 @@ gulp.task('examples', ['careless'], function() {
 
 gulp.task('clean', function(cb) {
   del(['dist/*'], cb);
-});
-
-gulp.task('modulize', ['careless'], function() {
-  return gulp.src('dist/careless/index.js')
-    .pipe(gulp.dest(''));
 });
 
 gulp.task('default', ['careless', 'examples']);

@@ -1,3 +1,5 @@
+var util = require('util');
+
 class Component {
   constructor() {    
   }
@@ -127,7 +129,7 @@ var _renderToString = function(node, out, context) {
   }
 
   // Data flagged as raw to avoid escaping
-  if (node.raw) {
+  if (node.raw !== undefined) {
     out.push(String(node.raw));
     return;
   }
@@ -168,7 +170,7 @@ var _renderToString = function(node, out, context) {
   }
 
   // ?
-  throw Error('Unsupported node : ' + node);
+  throw Error('Unsupported node : ' + util.inspect(node));
 };
 
 // Ex: Careless.__spread({},  blockStyle, {"margin-top": blockSpacing})

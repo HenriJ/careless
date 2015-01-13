@@ -1,5 +1,4 @@
 var util = require('util');
-var path = require('path');
 
 class Component {
   constructor() {    
@@ -110,21 +109,14 @@ var renderAttributes = function(props) {
 
 var renderToString = function(node, context, resCallback) {
 
-  var _resCallback;
   if (!resCallback) {
-    _resCallback = function() { throw Error('Callback de ressources non défini'); };
-  } else {
-    _resCallback = function() {
-      var filePath = path.join.apply(null, Array.prototype.slice.call(arguments));
-      resCallback(filePath);
-      return filePath;
-    }
+    resCallback = function() { throw Error('Callback de ressources non défini'); };
   }
 
   var out = [];
   var _context = {
     context: context,
-    resCallback: _resCallback
+    resCallback: resCallback
   };
 
   _renderToString(node, out, _context);

@@ -1,5 +1,4 @@
 var util = require('util');
-var path = require('path');
 
 
   function Component() {"use strict";    
@@ -110,27 +109,22 @@ var renderAttributes = function(props) {
 
 var renderToString = function(node, context, resCallback) {
 
-  var _resCallback;
   if (!resCallback) {
-    _resCallback = function() { throw Error('Callback de ressources non défini'); };
-  } else {
-    _resCallback = function() {
-      var filePath = path.join.apply(null, Array.prototype.slice.call(arguments));
-      resCallback(filePath);
-      return filePath;
-    }
+    resCallback = function() { throw Error('Callback de ressources non défini'); };
   }
 
   var out = [];
   var _context = {
     context: context,
-    resCallback: _resCallback
+    resCallback: resCallback
   };
 
   _renderToString(node, out, _context);
 
   return out.join('');
 };
+
+var TAGS_NO_SHORT_CLOSING = ['div', 'span', 'p']; // TODO à compléter
 
 var _renderToString = function(node, out, _context) {
 
@@ -172,7 +166,7 @@ var _renderToString = function(node, out, _context) {
   // "real" node (those beginning with a lowercase letter)
   if (node.elt) {
     out.push('<'+node.elt+renderAttributes(node.props));
-    if (node.props.children.length > 0) {
+    if (node.props.children.length > 0 || TAGS_NO_SHORT_CLOSING.indexOf(node.elt) !== -1) {
       out.push('>');
       for (var i in node.props.children) {
         var child = node.props.children[i];

@@ -124,6 +124,8 @@ var renderToString = function(node, context, resCallback) {
   return out.join('');
 };
 
+var TAGS_NO_SHORT_CLOSING = ['div', 'span', 'p']; // TODO à compléter
+
 var _renderToString = function(node, out, _context) {
 
   // null => no render
@@ -164,7 +166,7 @@ var _renderToString = function(node, out, _context) {
   // "real" node (those beginning with a lowercase letter)
   if (node.elt) {
     out.push('<'+node.elt+renderAttributes(node.props));
-    if (node.props.children.length > 0) {
+    if (node.props.children.length > 0 || TAGS_NO_SHORT_CLOSING.indexOf(node.elt) !== -1) {
       out.push('>');
       for (var i in node.props.children) {
         var child = node.props.children[i];

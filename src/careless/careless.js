@@ -1,4 +1,5 @@
 var util = require('util');
+var path = require('path');
 
 class Component {
   constructor() {    
@@ -67,7 +68,7 @@ var createElement = function(elt, props) {
   }
 
   return node;
-}
+};
 
 // DEPRECATED. Use es6 class instead
 var createClass = function(def) {
@@ -75,7 +76,7 @@ var createClass = function(def) {
     displayName: def.displayName,
     render: def.render
   };
-}
+};
 
 var renderAttributes = function(props) {
   var attrs = [];
@@ -105,17 +106,33 @@ var renderAttributes = function(props) {
   }
 
   return attrs.length > 0 ? ' ' + attrs.join(' '): '';
-}
+};
 
-var renderToString = function(node, context) {
+var renderToString = function(node, context, resCallback) {
+
+  var _resCallback;
+  if (!resCallback) {
+    _resCallback = function() { throw Error('Callback de ressources non défini'); };
+  } else {
+    _resCallback = function() {
+      var filePath = path.join.apply(null, Array.prototype.slice.call(arguments));
+      resCallback(filePath);
+      return filePath;
+    }
+  }
+
   var out = [];
+  var _context = {
+    context: context,
+    resCallback: _resCallback
+  };
 
-  _renderToString(node, out, context);
+  _renderToString(node, out, _context);
 
   return out.join('');
-}
+};
 
-var _renderToString = function(node, out, context) {
+var _renderToString = function(node, out, _context) {
 
   // null => no render
   if (node === null) {
@@ -137,7 +154,7 @@ var _renderToString = function(node, out, context) {
   // Array of nodes => render each element
   if (Array.isArray(node)) {
     node.forEach(function(n) {
-      _renderToString(n, out, context);
+      _renderToString(n, out, _context);
     });
     return;
   }
@@ -146,9 +163,9 @@ var _renderToString = function(node, out, context) {
   // If we have an object with a render function
   if (node.render) {
     if (node.setContext) {
-      node.setContext(context);
+      node.setContext(_context.context);
     }
-    _renderToString(node.render(node.props, context), out, context);
+    _renderToString(node.render(node.props, _context.context, _context.resCallback), out, _context);
     return;
   }
 
@@ -159,7 +176,7 @@ var _renderToString = function(node, out, context) {
       out.push('>');
       for (var i in node.props.children) {
         var child = node.props.children[i];
-        _renderToString(child, out, context);
+        _renderToString(child, out, _context);
       }
       out.push('</'+node.elt+'>');
     } else {

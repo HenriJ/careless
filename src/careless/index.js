@@ -1,5 +1,6 @@
 var careless = require('./careless');
 var tools = require('./tools');
+var m = require('./m');
 
 module.exports = {
   createElement: careless.createElement,
@@ -9,5 +10,6 @@ module.exports = {
   raw: careless.raw,
   escapeXml: careless.escapeXml,
   __spread: careless.__spread,
+  m: m,
   tools: tools
 };

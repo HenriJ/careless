@@ -1,4 +1,5 @@
 var util = require('util');
+var renderAttributes = require('./render/attr');
 
 class Component {
   constructor() {    
@@ -75,36 +76,6 @@ var createClass = function(def) {
     displayName: def.displayName,
     render: def.render
   };
-};
-
-var renderAttributes = function(props) {
-  var attrs = [];
-
-  for (var p in props) {
-    if (p === 'children') {
-      continue;
-    }
-
-    var prop = props[p];
-    var s = [];
-    
-    if (typeof prop === 'string' || typeof prop === 'number') {
-      s.push(prop);
-    } else if (Array.isArray(prop)) {
-      for (var i in prop) {
-        s.push(prop[i]);
-      }
-    } else if (typeof prop === 'object') {
-      // TODO to handle inline styles à-la-react
-      console.error("TODO");
-    } else {
-      throw Error('Unsupported type of attribute : ' + p);
-    }
-
-    attrs.push(p+'="'+s.join(' ')+'"');
-  }
-
-  return attrs.length > 0 ? ' ' + attrs.join(' '): '';
 };
 
 var renderToString = function(node, context, resCallback) {

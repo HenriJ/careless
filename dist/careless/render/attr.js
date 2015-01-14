@@ -1,3 +1,4 @@
+var util = require('util');
 
 // Taken from React source code
 var _uppercasePattern = /([A-Z])/g;
@@ -21,6 +22,14 @@ var renderAttributes = function(props) {
 
 var renderAttribute = function(propName, prop) {
 
+  if (typeof prop === "undefined" || prop === null || prop === false) {
+    return "";
+  }
+
+  if (prop === true) {
+    return propName;
+  }
+
   var propVal = "";
 
   if (typeof prop === 'string' || typeof prop === 'number') {
@@ -34,11 +43,17 @@ var renderAttribute = function(propName, prop) {
   } else if (typeof prop === 'object') {
     propVal = renderStyleObject(prop);
   } else {
-    throw Error('Unsupported type of attribute : ' + p);
+    throw Error('Unsupported type for attribute ' + propName + " : " + util.inspect(prop));
   }
 
   return propName+'="'+propVal+'"';
 
+};
+
+var stylesToVendorExtensions = {
+  "border-radius": [
+    "-webkit-border-radius", "-moz-border-radius"
+  ]
 };
 
 var renderStyleObject = function(prop) {

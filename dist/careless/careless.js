@@ -95,7 +95,7 @@ var renderToString = function(node, context, resCallback) {
   return out.join('');
 };
 
-var TAGS_NO_SHORT_CLOSING = ['div', 'span', 'p']; // TODO à compléter
+var TAGS_NO_SHORT_CLOSING = ['div', 'span', 'p', 'title']; // TODO à compléter
 
 var _renderToString = function(node, out, _context) {
 

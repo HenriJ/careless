@@ -1,7 +1,7 @@
 {
   "name": "careless",
   "description": "A jsx/react fork for static XML generation",
-  "version": "0.0.12",
+  "version": "0.1.1",
   "keywords": [
     "react",
     "jsx",
@@ -10,7 +10,7 @@
   ],
   "license": "BSD-3-Clause",
   "bin": {
-    "jsxx": "./bin/jsxx"
+    "jsx2": "./bin/jsx2"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,8 @@
     "del": "^1.1.1",
     "gulp": "^3.8.10",
     "merge-stream": "^0.1.6",
-    "vinyl-source-stream": "^1.0.0"
+    "vinyl-source-stream": "^1.0.0",
+    "jest-cli": "^0.2.1"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -37,6 +38,24 @@
   },
   "scripts" :
   {
+    "test": "jest",
     "prepublish" : "gulp"
+  },
+  "jest": {
+    "rootDir": "",
+    "scriptPreprocessor": "jest/preprocessor.js",
+    "setupEnvScriptFile": "jest/environment.js",
+    "modulePathIgnorePatterns": [
+      "/build/",
+      "/node_modules/",
+      "/.module-cache/"
+    ],
+    "testPathIgnorePatterns": [
+      "/build/",
+      "/node_modules/"
+    ],
+    "unmockedModulePathPatterns": [
+      ""
+    ]
   }
 }

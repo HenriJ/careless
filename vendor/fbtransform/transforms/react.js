@@ -52,19 +52,20 @@ function visitReactTag(traverse, object, path, state) {
   utils.catchup(openingElement.range[0], state, trimLeft);
 
   // We assume that the React runtime is already in scope
-  utils.append('Careless.createElement(', state);
+  utils.append('{', state);
 
   // Identifiers with lower case or hypthens are fallback tags (strings).
   // XJSMemberExpressions are not.
   if (nameObject.type === Syntax.XJSNamespacedName && nameObject.namespace) {
-    
-    utils.append('"' + nameObject.namespace.name + ':' + nameObject.name.name + '"', state);
-    utils.move(nameObject.range[1], state);	  
+
+    utils.append('elt: "' + nameObject.namespace.name + ':' + nameObject.name.name + '"', state);
+    utils.move(nameObject.range[1], state);
   } else if (nameObject.type === Syntax.XJSIdentifier && isTagName(nameObject.name)) {
 
-    utils.append('"' + nameObject.name + '"', state);
+    utils.append('elt: "' + nameObject.name + '"', state);
     utils.move(nameObject.range[1], state);
   } else {
+    utils.append('elt: ', state);
     // Use utils.catchup in this case so we can easily handle
     // XJSMemberExpressions which look like Foo.Bar.Baz. This also handles
     // XJSIdentifiers that aren't fallback tags.
@@ -72,7 +73,7 @@ function visitReactTag(traverse, object, path, state) {
     utils.catchup(nameObject.range[1], state);
   }
 
-  utils.append(', ', state);
+  utils.append(', props: ', state);
 
   var hasAttributes = attributesObject.length;
 
@@ -80,10 +81,17 @@ function visitReactTag(traverse, object, path, state) {
     return attr.type === Syntax.XJSSpreadAttribute;
   });
 
+  // filter out whitespace
+  var childrenToRender = object.children.filter(function(child) {
+    return !(child.type === Syntax.Literal
+    && typeof child.value === 'string'
+    && child.value.match(/^[ \t]*[\r\n][ \t\r\n]*$/));
+  });
+
   // if we don't have any attributes, pass in null
   if (hasAtLeastOneSpreadProperty) {
-    utils.append('Careless.__spread({', state);
-  } else if (hasAttributes) {
+    utils.append('Object.assign({', state);
+  } else if (hasAttributes || childrenToRender.length > 0) {
     utils.append('{', state);
   } else {
     utils.append('null', state);
@@ -99,7 +107,7 @@ function visitReactTag(traverse, object, path, state) {
     if (attr.type === Syntax.XJSSpreadAttribute) {
       // Close the previous object or initial object
       if (!previousWasSpread) {
-        utils.append('}, ', state);
+        utils.append('},', state);
       }
 
       // Move to the expression start, ignoring everything except parenthesis
@@ -132,8 +140,8 @@ function visitReactTag(traverse, object, path, state) {
       isLast = attributesObject[index + 1].type === Syntax.XJSSpreadAttribute;
     }
 
-    var name = (attr.name.namespace) ? 
-      attr.name.namespace.name + ':' + attr.name.name.name :
+    var name = (attr.name.namespace) ?
+    attr.name.namespace.name + ':' + attr.name.name.name :
       attr.name.name;
 
     utils.catchup(attr.range[0], state, trimLeft);
@@ -173,32 +181,24 @@ function visitReactTag(traverse, object, path, state) {
     utils.move(openingElement.range[1], state);
   }
 
-  if (hasAttributes && !previousWasSpread) {
-    utils.append('}', state);
-  }
-
-  if (hasAtLeastOneSpreadProperty) {
-    utils.append(')', state);
-  }
-
-  // filter out whitespace
-  var childrenToRender = object.children.filter(function(child) {
-    return !(child.type === Syntax.Literal
-             && typeof child.value === 'string'
-             && child.value.match(/^[ \t]*[\r\n][ \t\r\n]*$/));
-  });
   if (childrenToRender.length > 0) {
     var lastRenderableIndex;
 
     childrenToRender.forEach(function(child, index) {
       if (child.type !== Syntax.XJSExpressionContainer ||
-          child.expression.type !== Syntax.XJSEmptyExpression) {
+        child.expression.type !== Syntax.XJSEmptyExpression) {
         lastRenderableIndex = index;
       }
     });
 
     if (lastRenderableIndex !== undefined) {
-      utils.append(', ', state);
+      if (attributesObject.length > 0) {
+        utils.append(', ', state);
+      }
+      if (previousWasSpread) {
+        utils.append('{', state);
+      }
+      utils.append('children: [', state);
     }
 
     childrenToRender.forEach(function(child, index) {
@@ -219,6 +219,8 @@ function visitReactTag(traverse, object, path, state) {
 
       utils.catchup(child.range[1], state, trimLeft);
     });
+
+    utils.append(']', state);
   }
 
   if (openingElement.selfClosing) {
@@ -231,7 +233,15 @@ function visitReactTag(traverse, object, path, state) {
     utils.move(object.closingElement.range[1], state);
   }
 
-  utils.append(')', state);
+  if (hasAttributes && !previousWasSpread || childrenToRender.length > 0) {
+    utils.append('}', state);
+  }
+
+  if (hasAtLeastOneSpreadProperty) {
+    utils.append(')', state);
+  }
+
+  utils.append('}', state);
   return false;
 }
 

@@ -1,6 +1,10 @@
 var util = require('util');
 var renderAttributes = require('./render/attr');
 
+var isFunction = function(obj) {
+  return !!(obj && obj.constructor && obj.call && obj.apply);
+};
+
 class Component {
   constructor() {    
   }
@@ -126,18 +130,19 @@ var _renderToString = function(node, out, _context) {
 
   // Careless virtual node with a render function
   // If we have an object with a render function
-  if (node.render) {
+  if (node.render || isFunction(node.elt)) {
     if (node.setContext) {
       node.setContext(_context.context);
     }
-    _renderToString(node.render(node.props, _context.context, _context.resCallback), out, _context);
+    var render = node.render || node.elt;
+    _renderToString(render(node.props, _context.context, _context.resCallback), out, _context);
     return;
   }
 
   // "real" node (those beginning with a lowercase letter)
   if (node.elt) {
     out.push('<'+node.elt+renderAttributes(node.props));
-    if (node.props.children.length > 0 || TAGS_NO_SHORT_CLOSING.indexOf(node.elt) !== -1) {
+    if (node.props && node.props.children && node.props.children.length > 0 || TAGS_NO_SHORT_CLOSING.indexOf(node.elt) !== -1) {
       out.push('>');
       for (var i in node.props.children) {
         var child = node.props.children[i];

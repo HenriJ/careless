@@ -12,7 +12,6 @@
 var Syntax = require('jstransform').Syntax;
 var utils = require('jstransform/src/utils');
 
-var FALLBACK_TAGS = require('./xjs').knownTags;
 var renderXJSExpressionContainer =
   require('./xjs').renderXJSExpressionContainer;
 var renderXJSLiteral = require('./xjs').renderXJSLiteral;

@@ -17,12 +17,6 @@ require('mock-modules').autoMockOff();
 
 describe('reactless jsx', function() {
   var transformAll = require('../../syntax.js').transformAll;
-  var xjs = require('../xjs.js');
-
-  // Add <font-face> to list of known tags to ensure that when we test support
-  // for hyphentated known tags, it's there.
-  // TODO: remove this when/if <font-face> is supported out of the box.
-  xjs.knownTags['font-face'] = true;
 
   var transform = function(code, excludes) {
     return transformAll(

@@ -7,34 +7,70 @@ Examples :
 ```js
 var Careless = require('careless');
 
-// Careless works with XML namespace
+// Careless works with XML namespace and custom XML tags
 var XslfoExample = function(props, context) {
-	return (
-		<fo:page-sequence master-reference="my-page">
-			<fo:flow flow-name="xsl-region-body">
-				<fo:block>{props.children}</fo:block>
-			</fo:flow>
-		</fo:page-sequence>
-	);
+  return (
+    <fo:page-sequence master-reference="my-page">
+      <fo:flow flow-name="xsl-region-body">
+        <fo:block>{props.children}</fo:block>
+      </fo:flow>
+    </fo:page-sequence>
+  );
 };
 
-console.log(Careless.renderToString(XslfoExample, {}));
+console.log(Careless.renderToString(<XslfoExample>Example</XslfoExample>, {}));
 
 // Careless doesn't care if you use string for inline style
 var XhtmlExample = function(props, context) {
-	return(
-	<div>
-		<h1 style="margin-top: 5px;">{props.title}</h1>
-		<div>
-			{{raw: context.html}}
-		</div>
-	</div>
-	);
-);
+  return (
+    <div>
+      <h1 style="margin-top: 5px;">{props.title}</h1>
+      <div>
+        {{raw: context.html}}
+      </div>
+    </div>
+  );
+};
 
 // Careless doesn't event care if you want to pass a "global" context when rendering
-console.log(Careless.renderToString(XhtmlExample, {html: "<span>Raw HTML !</span>"}));
+console.log(Careless.renderToString(<XhtmlExample title="Careless"/>, {html: "<span>Raw HTML !</span>"}));
 ```
+
+# Why Careless
+
+## Spirit
+
+Templating engines are often a pain:
+
+- A new DSL to learn
+- Often dumb string interpolation, easy to make mistakes
+- Customer interpreter : no tooling to easily debug the templates !
+
+JSX is a great idea by Facebook that enable us to write XML directly in JS :
+no need for a templating engine, your JS becomes the engine !
+You can write your template directly in your JS code,
+you can require() your components,
+you can use node-debug to debug your template.
+
+The only problem, is that React/Facebook's JSX is for building dynamic Single Page Apps. It only supports Xhtml, is
+ very opinionated when it comes to attributes (no string inline styles, use className instead of class, ...) which is
+ very helpful when writing a SPA, but doesn't serve us when wirting a static XML document (that might even not be html).
+
+Careless is a fork of Facebook's JSX, that allows custom tags, custom attributes and XML namespaces : the only (?)
+XML features missing from Careless are doctypes and XML comments.
+
+Because for a static document you don't need state, Careless doesn't use React components, but directly JS functions.
+
+## Use case
+
+The main use case of Careless is to build mails for your customers.
+
+- You can use it to construct emails : it is particularly practical because in an email you have to inline styles
+(except media queries), and JSX syntax makes style inlining easier (of course you could still write your styles in a
+separate CSS and use a tool like https://github.com/Automattic/juice if you want to)
+- You can use it to construct paper mails using a PDF generator. If you write XSL-FO, you can use
+Apache FOP or RenderX to generate PDF or AFP files. If you write HTML, you can use PhantomJS, PrinceXML or Antenna House
+to generate PDF.
 
 # Differences with Facebook flavored JSX/React
 

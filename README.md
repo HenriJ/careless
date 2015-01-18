@@ -54,7 +54,7 @@ you can use node-debug to debug your template.
 
 The only problem, is that React/Facebook's JSX is for building dynamic Single Page Apps. It only supports Xhtml, is
  very opinionated when it comes to attributes (no string inline styles, use className instead of class, ...) which is
- very helpful when writing a SPA, but doesn't serve us when wirting a static XML document (that might even not be html).
+ very helpful when writing a SPA, but doesn't serve us when writing a static XML document (that might even not be html).
 
 Careless is a fork of Facebook's JSX, that allows custom tags, custom attributes and XML namespaces : the only (?)
 XML features missing from Careless are doctypes and XML comments.
@@ -63,7 +63,7 @@ Because for a static document you don't need state, Careless doesn't use React c
 
 ## Use case
 
-The main use case of Careless is to build mails for your customers.
+The main use case for Careless is to build dynamically generated mails for your customers :
 
 - You can use it to construct emails : it is particularly practical because in an email you have to inline styles
 (except media queries), and JSX syntax makes style inlining easier (of course you could still write your styles in a
@@ -76,9 +76,10 @@ to generate PDF.
 
 ## JSX : POJO instead of createElement
 
-Careless's JSX compiles to pure POJO (as next versions of React will be) and ES6 Object.assign for the spread attribute.
+Careless JSX compiles to pure POJOs (as next versions of React will do) and ES6 Object.assign for the spread attribute
+([also in next versions of React}(https://github.com/facebook/react/issues/2417))
 
-This way the creation of the nodes tree is separated from the redenring : because nodes are POJOs, you don't need to
+This way the creation of the nodes tree is separated from the rendering : because nodes are POJOs, you don't need to
 require Careless in the modules that do no rendering.
 
 Note: When you require careless, it will polyfill Object.assign if it doesn't exist
@@ -91,7 +92,7 @@ var attrs = {style: "color: red;"};
 var divWithSpreadAttrs = <div {...attrs}>Div with spread</div>;
 ```
 
-compiles to :
+transpiles to :
 
 ```js
 var simpleDivWithId = {type: "div", props: {id: "div-id", children: ["Simple Div"]}};
@@ -100,7 +101,7 @@ var attrs = {style: "color: red;"};
 var divWithSpreadAttrs = {type: "div", props: Object.assign({}, attrs, {children: ["Div with spread"]})};
 ```
 
-# JSX : XML support (XML namespace, custom tags, ...)
+## JSX : XML support (XML namespace, custom tags, ...)
 
 Careless is not only html-focused. It will accept any kind of xml tags and even xml namespaces.
 
@@ -116,16 +117,16 @@ It allows you to write things like
 </page-sequence>
 ```
 
-# Rendering : raw xml/html support
+## Rendering : raw xml/html support
 
-Careless doesn't use __dangerouslySetInnerHtml, but the simplier (riskier ?) {raw: "<div>Raw HTML</div>"}
+Careless doesn't use `__dangerouslySetInnerHtml`, but the simpler (riskier ?) `{raw: "<div>Raw HTML</div>"}`
 
 Example:
 ```js
 Careless.renderToString(<div>{{raw: "<span>Raw HTML !</span>"}}</div>);
 ```
 
-# Rendering : no state, no class !
+## Rendering : no state, no class !
 
 When generating a static document, there is little need for state.
 Therefore there is no Careless.createClass.
@@ -139,11 +140,11 @@ function Custom(props) {
 Careless.renderToString(<div><Custom content="Tag"/></div>);
 ```
 
-# Rendering : special handling of attributes
+## Rendering : special handling of attributes
 
-To give a class to your HTML tag, just use the class attribute, not className.
+To give a CSS class to your HTML tag, just use the `class` attribute, not `className`.
 
-Inline-style can be written directly as a string, no need to use an object if you don't want to.
+Inline styles can be written directly as a string, no need to use an object if you don't want to.
 
 ```js
 // This is OK in careless but not in react
@@ -156,7 +157,7 @@ var otherDivWithClass = <div classname="header"></div>;
 var style = {color: "red"};
 var divWithStyle = <div style={style}></div>;
 
-// This OK only in careless (because it doesn't care)
+// This OK only in careless (because it doesn't care), but not valid react
 var otherDivWithStyle = <div style="color: red;"></div>
 ```
 
@@ -173,32 +174,32 @@ var Careless = require('careless');
 
 
 var Recipient = function(props, context) {
-	var customer = context.customer;
-	return (
-		<div>
-			{customer.name}<br />
-			{customer.address}<br />
-			{customer.city}
-		</div>
-	);
-}
+  var customer = context.customer;
+  return (
+    <div>
+            {customer.name}<br />
+            {customer.address}<br />
+            {customer.city}
+    </div>
+  );
+};
 
 var Mail = function(props, context) {
-	return (
-		<div>
-			<Recipient />
-			<div>Great discount today : {props.discount}</div>
-		</div>
-	);
-);
+  return (
+    <div>
+      <Recipient />
+      <div>Great discount today : {props.discount}</div>
+    </div>
+  );
+};
 
-var context: {
-	customer = {
-		name: "M. John Doe",
-		address: "26 rue de Berri",
-		city: "Paris"
-	}
-}
+var context = {
+  customer: {
+    name: "M. John Doe",
+    address: "26 rue de Berri",
+    city: "Paris"
+  }
+};
 
 console.log(Careless.renderToString(<Mail discount="10%" />, context));
 ```

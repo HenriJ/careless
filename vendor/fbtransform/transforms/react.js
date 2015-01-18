@@ -57,14 +57,14 @@ function visitReactTag(traverse, object, path, state) {
   // XJSMemberExpressions are not.
   if (nameObject.type === Syntax.XJSNamespacedName && nameObject.namespace) {
 
-    utils.append('elt: "' + nameObject.namespace.name + ':' + nameObject.name.name + '"', state);
+    utils.append('type: "' + nameObject.namespace.name + ':' + nameObject.name.name + '"', state);
     utils.move(nameObject.range[1], state);
   } else if (nameObject.type === Syntax.XJSIdentifier && isTagName(nameObject.name)) {
 
-    utils.append('elt: "' + nameObject.name + '"', state);
+    utils.append('type: "' + nameObject.name + '"', state);
     utils.move(nameObject.range[1], state);
   } else {
-    utils.append('elt: ', state);
+    utils.append('type: ', state);
     // Use utils.catchup in this case so we can easily handle
     // XJSMemberExpressions which look like Foo.Bar.Baz. This also handles
     // XJSIdentifiers that aren't fallback tags.

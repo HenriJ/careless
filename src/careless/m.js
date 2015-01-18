@@ -1,12 +1,10 @@
 module.exports = function m() {
-  var out = {};
+  var args = [{}];
 
   for (var i = 0; i < arguments.length; i++) {
-    var obj = arguments[i];
-    for (var j in obj) {
-      out[j] = obj[j];
-    }
+    args.push(arguments[i]);
   }
 
-  return out;
+  // When ES6 spread operator is here, could be simply Object.assign({}, ...arguments)
+  return Object.assign.apply(null, args);
 };

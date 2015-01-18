@@ -28,7 +28,7 @@ describe('reactless jsx', function() {
 
   it('should convert simple tags', function() {
     var code = 'var x = <div></div>;';
-    var result = 'var x = {elt: "div", props: null};';
+    var result = 'var x = {type: "div", props: null};';
 
     expect(transform(code).code).toEqual(result);
   });
@@ -36,56 +36,56 @@ describe('reactless jsx', function() {
 
   it('should convert simple text', function() {
     var code = 'var x = <div>text</div>;';
-    var result = 'var x = {elt: "div", props: {children: ["text"]}};';
+    var result = 'var x = {type: "div", props: {children: ["text"]}};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should accept xml namespaces', function() {
     var code = 'var x = <fo:block>text</fo:block>;';
-    var result = 'var x = {elt: "fo:block", props: {children: ["text"]}};';
+    var result = 'var x = {type: "fo:block", props: {children: ["text"]}};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should accept string attributes', function() {
     var code = 'var x = <div style="color: red;">text</div>;';
-    var result = 'var x = {elt: "div", props: {style: "color: red;", children: ["text"]}};';
+    var result = 'var x = {type: "div", props: {style: "color: red;", children: ["text"]}};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should accept interpolated attributes', function() {
     var code = 'var x = <div style={"color: red;"}>text</div>;';
-    var result = 'var x = {elt: "div", props: {style: "color: red;", children: ["text"]}};';
+    var result = 'var x = {type: "div", props: {style: "color: red;", children: ["text"]}};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should accept js attributes', function() {
     var code = 'var x = <div style={style}>text</div>;';
-    var result = 'var x = {elt: "div", props: {style: style, children: ["text"]}};';
+    var result = 'var x = {type: "div", props: {style: style, children: ["text"]}};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should support self-closed tags', function() {
     var code = 'var x = <br />;';
-    var result = 'var x = {elt: "br", props: null};';
+    var result = 'var x = {type: "br", props: null};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should support spread props', function() {
     var code = 'var x = <hr {...spread} />;';
-    var result = 'var x = {elt: "hr", props: Object.assign({}, spread)};';
+    var result = 'var x = {type: "hr", props: Object.assign({}, spread)};';
 
     expect(transform(code).code).toEqual(result);
   });
 
   it('should support spread props and not use unecessary object', function() {
     var code = 'var x = <hr data="data" {...spread} />;';
-    var result = 'var x = {elt: "hr", props: Object.assign({data: "data"}, spread)};';
+    var result = 'var x = {type: "hr", props: Object.assign({data: "data"}, spread)};';
 
     expect(transform(code).code).toEqual(result);
   });

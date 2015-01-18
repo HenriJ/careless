@@ -1,15 +1,12 @@
-var careless = require('./careless');
+require('./object-assign-polyfill');
+
+var render = require('./render');
 var tools = require('./tools');
 var m = require('./m');
 
 module.exports = {
-  createElement: careless.createElement,
-  createClass: careless.createClass,
-  renderToString: careless.renderToString,
-  Component: careless.Component,
-  raw: careless.raw,
-  escapeXml: careless.escapeXml,
-  __spread: careless.__spread,
+  renderToString: render.renderToString,
+  escapeXml: render.escapeXml,
   m: m,
   tools: tools
 };

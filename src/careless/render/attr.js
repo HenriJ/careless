@@ -67,10 +67,10 @@ var renderStyleObject = function(prop) {
   var styles = [];
 
   for (var key in prop) {
-    styles.push(hyphenate(key) + ": " + prop[key]);
+    styles.push(hyphenate(key) + ": " + prop[key] +";");
   }
 
-  return styles.join("; ");
+  return styles.join(" ");
 };
 
 module.exports = renderAttributes;

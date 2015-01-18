@@ -67,7 +67,7 @@ The main use case of Careless is to build mails for your customers.
 
 - You can use it to construct emails : it is particularly practical because in an email you have to inline styles
 (except media queries), and JSX syntax makes style inlining easier (of course you could still write your styles in a
-separate CSS and use a tool like https://github.com/Automattic/juice if you want to)
+separate CSS and use a tool like [juice](https://github.com/Automattic/juice) if you want to)
 - You can use it to construct paper mails using a PDF generator. If you write XSL-FO, you can use
 Apache FOP or RenderX to generate PDF or AFP files. If you write HTML, you can use PhantomJS, PrinceXML or Antenna House
 to generate PDF.

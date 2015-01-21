@@ -1,6 +1,9 @@
 # Careless
 
-A JSX/React fork for static XML generation that just don't care.
+A JSX/React fork for static XML generation especially useful to create
+ebooks,
+emails,
+xhtml for PDF generators...
 
 
 Examples :

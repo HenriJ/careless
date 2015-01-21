@@ -91,7 +91,7 @@ describe('reactless jsx', function() {
   });
 
 /*
-  // TODO
+  // Is it really a good idea to accept XML comments ?
   it('should support xml comments', function() {
     var code = 'var x = <!-- XML comment -->;';
     var result = 'var x = {raw: "<!-- XML comment -->"};';

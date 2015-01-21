@@ -1,7 +1,7 @@
 {
   "name": "careless",
   "description": "A jsx/react fork for static XML generation",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "keywords": [
     "react",
     "jsx",

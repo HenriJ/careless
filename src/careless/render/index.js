@@ -83,8 +83,10 @@ var _renderToString = function(node, out, contexts) {
   // If node.type is a function, this is a "virtual" node
   if (isFunction(node.type)) {
     var render = node.type;
-    // Could be replace by ES6 spread operator when available : args = [node.props, ...contexts]
-    var args = [node.props];
+    var props = node.props || {}; // props are never undefined, at least they are an empty object
+
+    // Could be replace by ES6 spread operator when available : args = [props, ...contexts]
+    var args = [props];
     contexts.forEach(c => args.push(c));
     _renderToString(render.apply(this, args), out, contexts);
     return;

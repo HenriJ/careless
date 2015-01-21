@@ -55,7 +55,7 @@ You can write your template directly in your JS code,
 you can require() your components,
 you can use node-debug to debug your template.
 
-The only problem, is that React/Facebook's JSX is for building dynamic Single Page Apps. It only supports Xhtml, is
+The only problem, is that ReactJS/Facebook's JSX is for building dynamic Single Page Apps. It only supports Xhtml, is
  very opinionated when it comes to attributes (no string inline styles, use className instead of class, ...) which is
  very helpful when writing a SPA, but doesn't serve us when writing a static XML document (that might even not be html).
 
@@ -80,7 +80,7 @@ to generate PDF.
 ## JSX : POJO instead of createElement
 
 Careless JSX compiles to pure POJOs (as next versions of React will do) and ES6 Object.assign for the spread attribute
-([also in next versions of React}(https://github.com/facebook/react/issues/2417))
+([also in next versions of React](https://github.com/facebook/react/issues/2417))
 
 This way the creation of the nodes tree is separated from the rendering : because nodes are POJOs, you don't need to
 require Careless in the modules that do no rendering.
@@ -174,7 +174,6 @@ Careless allows you to pass automatically this context down to every child compo
 Examples :
 ```js
 var Careless = require('careless');
-
 
 var Recipient = function(props, context) {
   var customer = context.customer;

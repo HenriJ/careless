@@ -43,19 +43,16 @@ gulp.task('careless', function() {
   
 });
 
-gulp.task('examples', ['careless'], function() {
+gulp.task('samples', ['careless'], function() {
 
-  var ressources = gulp.src('src/examples/**/*.{jpg,png,json,txt,md}')
-  .pipe(gulp.dest('dist/examples'));
+  var ressources = gulp.src('src/samples/**/*.{jpg,png,json,txt,css,md}')
+  .pipe(gulp.dest('dist/samples'));
 
-  var scripts = gulp.src('src/examples/**/*.{js,jsx}')
+  var scripts = gulp.src('src/samples/**/*.{js,jsx}')
   .pipe(jsxxify())
-  .pipe(gulp.dest('dist/examples'));
+  .pipe(gulp.dest('dist/samples'));
 
-  var module_careless = gulp.src('dist/careless/**/*')
-  .pipe(gulp.dest('dist/node_modules/careless/'));
-
-  return merge(ressources, scripts, module_careless);
+  return merge(ressources, scripts);
   
 });
 
@@ -63,4 +60,4 @@ gulp.task('clean', function(cb) {
   del(['dist/*'], cb);
 });
 
-gulp.task('default', ['careless', 'examples']);
+gulp.task('default', ['careless', 'samples']);

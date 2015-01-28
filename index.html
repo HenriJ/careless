@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Careless by HenriJ</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Careless</h1>
+        <h2>JSX &#39;fork&#39; targeted at static XML documents generation</h2>
+        <a href="https://github.com/HenriJ/careless" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="careless" class="anchor" href="#careless" aria-hidden="true"><span class="octicon octicon-link"></span></a>Careless</h1>
+
+<p>A JSX/React fork for static XML generation especially useful to create
+ebooks,
+emails,
+xhtml for PDF generators...</p>
+
+<p>Examples :</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> Careless <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>careless<span class="pl-pds">'</span></span>);
+
+<span class="pl-c">// Careless works with XML namespace and custom XML tags</span>
+<span class="pl-s">var</span> <span class="pl-en">XslfoExample</span> <span class="pl-k">=</span> <span class="pl-st">function</span>(<span class="pl-vpf">props</span>, <span class="pl-vpf">context</span>) {
+  <span class="pl-k">return</span> (
+    <span class="pl-k">&lt;</span>fo<span class="pl-k">:</span>page<span class="pl-k">-</span>sequence master<span class="pl-k">-</span>reference<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>my-page<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+      <span class="pl-k">&lt;</span>fo<span class="pl-k">:</span>flow flow<span class="pl-k">-</span>name<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>xsl-region-body<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span>fo<span class="pl-k">:</span>block<span class="pl-k">&gt;</span>{props.children}<span class="pl-k">&lt;</span>/fo<span class="pl-k">:</span>block<span class="pl-k">&gt;</span>
+      <span class="pl-k">&lt;</span>/fo<span class="pl-k">:</span>flow<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>/fo<span class="pl-k">:</span>page<span class="pl-k">-</span>sequence<span class="pl-k">&gt;</span>
+  );
+};
+
+<span class="pl-en">console</span><span class="pl-s3">.log</span>(Careless.renderToString(<span class="pl-k">&lt;</span>XslfoExample<span class="pl-k">&gt;</span>Example<span class="pl-k">&lt;</span>/XslfoExample<span class="pl-k">&gt;</span>, {}));
+
+<span class="pl-c">// Careless doesn't care if you use string for inline style</span>
+<span class="pl-s">var</span> <span class="pl-en">XhtmlExample</span> <span class="pl-k">=</span> <span class="pl-st">function</span>(<span class="pl-vpf">props</span>, <span class="pl-vpf">context</span>) {
+  <span class="pl-k">return</span> (
+    <span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>
+      <span class="pl-k">&lt;</span>h1 style<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>margin-top: 5px;<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>{props.<span class="pl-sc">title</span>}<span class="pl-k">&lt;</span>/h1<span class="pl-k">&gt;</span>
+      <span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>
+        {{raw<span class="pl-k">:</span> context.html}}
+      <span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>
+  );
+};
+
+<span class="pl-c">// Careless doesn't event care if you want to pass a "global" context when rendering</span>
+<span class="pl-en">console</span><span class="pl-s3">.log</span>(Careless.renderToString(<span class="pl-k">&lt;</span>XhtmlExample title<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>Careless<span class="pl-pds">"</span></span>/<span class="pl-k">&gt;</span>, {html<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>&lt;span&gt;Raw HTML !&lt;/span&gt;<span class="pl-pds">"</span></span>}));</pre></div>
+
+<h1>
+<a id="why-careless" class="anchor" href="#why-careless" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Careless</h1>
+
+<h2>
+<a id="spirit" class="anchor" href="#spirit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spirit</h2>
+
+<p>Templating engines are often a pain:</p>
+
+<ul>
+<li>A new DSL to learn</li>
+<li>Often dumb string interpolation, easy to make mistakes</li>
+<li>Customer interpreter : no tooling to easily debug the templates !</li>
+</ul>
+
+<p>JSX is a great idea by Facebook that enable us to write XML directly in JS :
+no need for a templating engine, your JS becomes the engine !
+You can write your template directly in your JS code,
+you can require() your components,
+you can use node-debug to debug your template.</p>
+
+<p>The only problem, is that ReactJS/Facebook's JSX is for building dynamic Single Page Apps. It only supports Xhtml, is
+ very opinionated when it comes to attributes (no string inline styles, use className instead of class, ...) which is
+ very helpful when writing a SPA, but doesn't serve us when writing a static XML document (that might even not be html).</p>
+
+<p>Careless is a fork of Facebook's JSX, that allows custom tags, custom attributes and XML namespaces : the only (?)
+XML features missing from Careless are doctypes and XML comments.</p>
+
+<p>Because for a static document you don't need state, Careless doesn't use React components, but directly JS functions.</p>
+
+<h2>
+<a id="use-case" class="anchor" href="#use-case" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use case</h2>
+
+<p>The main use case for Careless is to build dynamically generated mails for your customers :</p>
+
+<ul>
+<li>You can use it to construct emails : it is particularly practical because in an email you have to inline styles
+(except media queries), and JSX syntax makes style inlining easier (of course you could still write your styles in a
+separate CSS and use a tool like <a href="https://github.com/Automattic/juice">juice</a> if you want to)</li>
+<li>You can use it to construct paper mails using a PDF generator. If you write XSL-FO, you can use
+Apache FOP or RenderX to generate PDF or AFP files. If you write HTML, you can use PhantomJS, PrinceXML or Antenna House
+to generate PDF.</li>
+</ul>
+
+<h1>
+<a id="differences-with-facebook-flavored-jsxreact" class="anchor" href="#differences-with-facebook-flavored-jsxreact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Differences with Facebook flavored JSX/React</h1>
+
+<h2>
+<a id="jsx--pojo-instead-of-createelement" class="anchor" href="#jsx--pojo-instead-of-createelement" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSX : POJO instead of createElement</h2>
+
+<p>Careless JSX compiles to pure POJOs (as next versions of React will do) and ES6 Object.assign for the spread attribute
+(<a href="https://github.com/facebook/react/issues/2417">also in next versions of React</a>)</p>
+
+<p>This way the creation of the nodes tree is separated from the rendering : because nodes are POJOs, you don't need to
+require Careless in the modules that do no rendering.</p>
+
+<p>Note: When you require careless, it will polyfill Object.assign if it doesn't exist</p>
+
+<p>Example :</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> simpleDivWithId <span class="pl-k">=</span> <span class="pl-k">&lt;</span>div id<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>div-id<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>Simple Div<span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>;
+
+<span class="pl-s">var</span> attrs <span class="pl-k">=</span> {style<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>color: red;<span class="pl-pds">"</span></span>};
+<span class="pl-s">var</span> divWithSpreadAttrs <span class="pl-k">=</span> <span class="pl-k">&lt;</span>div {...attrs}<span class="pl-k">&gt;</span>Div <span class="pl-k">with</span> spread<span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>;</pre></div>
+
+<p>transpiles to :</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> simpleDivWithId <span class="pl-k">=</span> {type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>div<span class="pl-pds">"</span></span>, props<span class="pl-k">:</span> {id<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>div-id<span class="pl-pds">"</span></span>, children<span class="pl-k">:</span> [<span class="pl-s1"><span class="pl-pds">"</span>Simple Div<span class="pl-pds">"</span></span>]}};
+
+<span class="pl-s">var</span> attrs <span class="pl-k">=</span> {style<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>color: red;<span class="pl-pds">"</span></span>};
+<span class="pl-s">var</span> divWithSpreadAttrs <span class="pl-k">=</span> {type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>div<span class="pl-pds">"</span></span>, props<span class="pl-k">:</span> <span class="pl-s3">Object</span>.assign({}, attrs, {children<span class="pl-k">:</span> [<span class="pl-s1"><span class="pl-pds">"</span>Div with spread<span class="pl-pds">"</span></span>]})};</pre></div>
+
+<h2>
+<a id="jsx--xml-support-xml-namespace-custom-tags-" class="anchor" href="#jsx--xml-support-xml-namespace-custom-tags-" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSX : XML support (XML namespace, custom tags, ...)</h2>
+
+<p>Careless is not only html-focused. It will accept any kind of xml tags and even xml namespaces.</p>
+
+<p>It allows you to write things like</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">&lt;</span>page<span class="pl-k">-</span>sequence master<span class="pl-k">-</span>reference<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>A4<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>afp<span class="pl-k">:</span>no<span class="pl-k">-</span>operation name<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>nop<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>NOP<span class="pl-k">&lt;</span>/afp<span class="pl-k">:</span>no<span class="pl-k">-</span>operation<span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>flow flow<span class="pl-k">-</span>name<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>xsl-region-body<span class="pl-pds">"</span></span> font<span class="pl-k">-</span>size<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>10pt<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>block margin<span class="pl-k">-</span>top<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>8mm<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+      Test
+    <span class="pl-k">&lt;</span>/block<span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>/flow<span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span>/page<span class="pl-k">-</span>sequence<span class="pl-k">&gt;</span></pre></div>
+
+<h2>
+<a id="rendering--raw-xmlhtml-support" class="anchor" href="#rendering--raw-xmlhtml-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rendering : raw xml/html support</h2>
+
+<p>Careless doesn't use <code>__dangerouslySetInnerHtml</code>, but the simpler (riskier ?) <code>{raw: "&lt;div&gt;Raw HTML&lt;/div&gt;"}</code></p>
+
+<p>Example:</p>
+
+<div class="highlight highlight-js"><pre>Careless.renderToString(<span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>{{raw<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>&lt;span&gt;Raw HTML !&lt;/span&gt;<span class="pl-pds">"</span></span>}}<span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>);</pre></div>
+
+<h2>
+<a id="rendering--no-state-no-class-" class="anchor" href="#rendering--no-state-no-class-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rendering : no state, no class !</h2>
+
+<p>When generating a static document, there is little need for state.
+Therefore there is no Careless.createClass.
+If you want to create a component, just write a function !</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-st">function</span> <span class="pl-en">Custom</span>(<span class="pl-vpf">props</span>) {
+  <span class="pl-k">return</span> <span class="pl-k">&lt;</span>span<span class="pl-k">&gt;</span>A custom {props.<span class="pl-sc">content</span>}<span class="pl-k">&lt;</span>/span<span class="pl-k">&gt;</span>;
+}
+
+Careless.renderToString(<span class="pl-k">&lt;</span>div<span class="pl-k">&gt;&lt;</span>Custom content<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>Tag<span class="pl-pds">"</span></span>/<span class="pl-k">&gt;&lt;</span>/div<span class="pl-k">&gt;</span>);</pre></div>
+
+<h2>
+<a id="rendering--special-handling-of-attributes" class="anchor" href="#rendering--special-handling-of-attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rendering : special handling of attributes</h2>
+
+<p>To give a CSS class to your HTML tag, just use the <code>class</code> attribute, not <code>className</code>.</p>
+
+<p>Inline styles can be written directly as a string, no need to use an object if you don't want to.</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">// This is OK in careless but not in react</span>
+<span class="pl-s">var</span> divWithClass <span class="pl-k">=</span> <span class="pl-k">&lt;</span>div <span class="pl-st">class</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>header<span class="pl-pds">"</span></span><span class="pl-k">&gt;&lt;</span>/div<span class="pl-k">&gt;</span>;
+
+<span class="pl-c">// This is KO in careless, but what you should do in react</span>
+<span class="pl-s">var</span> otherDivWithClass <span class="pl-k">=</span> <span class="pl-k">&lt;</span>div classname<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>header<span class="pl-pds">"</span></span><span class="pl-k">&gt;&lt;</span>/div<span class="pl-k">&gt;</span>;
+
+<span class="pl-c">// This is OK both in react and careless</span>
+<span class="pl-s">var</span> style <span class="pl-k">=</span> {color<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>};
+<span class="pl-s">var</span> divWithStyle <span class="pl-k">=</span> <span class="pl-k">&lt;</span>div style<span class="pl-k">=</span>{style}<span class="pl-k">&gt;&lt;</span>/div<span class="pl-k">&gt;</span>;
+
+<span class="pl-c">// This OK only in careless (because it doesn't care), but not valid react</span>
+<span class="pl-s">var</span> otherDivWithStyle <span class="pl-k">=</span> <span class="pl-k">&lt;</span>div style<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>color: red;<span class="pl-pds">"</span></span><span class="pl-k">&gt;&lt;</span>/div<span class="pl-k">&gt;</span></pre></div>
+
+<h1>
+<a id="context" class="anchor" href="#context" aria-hidden="true"><span class="octicon octicon-link"></span></a>Context</h1>
+
+<p>When generating static documents, typically mails for your customers, it is very practical to have a global context
+containing the customer common datas.
+Careless allows you to pass automatically this context down to every child components.</p>
+
+<p>Examples :</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> Careless <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>careless<span class="pl-pds">'</span></span>);
+
+<span class="pl-s">var</span> <span class="pl-en">Recipient</span> <span class="pl-k">=</span> <span class="pl-st">function</span>(<span class="pl-vpf">props</span>, <span class="pl-vpf">context</span>) {
+  <span class="pl-s">var</span> customer <span class="pl-k">=</span> context.customer;
+  <span class="pl-k">return</span> (
+    <span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>
+            {customer.<span class="pl-sc">name</span>}<span class="pl-k">&lt;</span>br /<span class="pl-k">&gt;</span>
+            {customer.address}<span class="pl-k">&lt;</span>br /<span class="pl-k">&gt;</span>
+            {customer.city}
+    <span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>
+  );
+};
+
+<span class="pl-s">var</span> <span class="pl-en">Mail</span> <span class="pl-k">=</span> <span class="pl-st">function</span>(<span class="pl-vpf">props</span>, <span class="pl-vpf">context</span>) {
+  <span class="pl-k">return</span> (
+    <span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>
+      <span class="pl-k">&lt;</span>Recipient /<span class="pl-k">&gt;</span>
+      <span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>Great discount today <span class="pl-k">:</span> {props.discount}<span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>
+  );
+};
+
+<span class="pl-s">var</span> context <span class="pl-k">=</span> {
+  customer<span class="pl-k">:</span> {
+    name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>M. John Doe<span class="pl-pds">"</span></span>,
+    address<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>26 rue de Berri<span class="pl-pds">"</span></span>,
+    city<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Paris<span class="pl-pds">"</span></span>
+  }
+};
+
+<span class="pl-en">console</span><span class="pl-s3">.log</span>(Careless.renderToString(<span class="pl-k">&lt;</span>Mail discount<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>10%<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>, context));</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/HenriJ/careless/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/HenriJ/careless/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/HenriJ/careless"></a> is maintained by <a href="https://github.com/HenriJ">HenriJ</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

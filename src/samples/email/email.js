@@ -2,21 +2,31 @@ var path = require('path');
 var Careless = require('careless');
 var Salted = require('careless-salted');
 
-var main = function() {
+var generateArticles = function(res) {
+  var Articles = [];
 
-  var usedResources = [];
-  var resourceFinder = function(...pathTokens) {
-    var fullPath = path.join.apply(null, pathTokens);
-    usedResources.push(path.relative(__dirname, fullPath));
-    return fullPath;
-  };
+  var colors = ["#F6BB42", "#5D9CEC", "#4FC1E9"];
+  var imgs = ["litmus-logo.jpg", "mailchimp-logo.jpg", "campaign-monitor-logo.jpg"];
 
-  var customerContext = {
+  for (var i = 0; i < 3; i++) {
+    Articles.push(
+      <Salted.CompactArticles.Article
+        meta="A meta description"
+        title={"The title of your article n°" + i}
+        img={res(__dirname, "node_modules/careless-salted/img", imgs[Math.floor(Math.random()*imgs.length)])}
+        imgAlt="">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at nisi iaculis, iaculis metus at, auctor arcu. Cras ac posuere neque, efficitur venenatis massa.
+      </Salted.CompactArticles.Article>
+    )
+  }
 
-  };
+  return Articles;
+};
 
+var Mail = function(props, context, res) {
   var pos = -1;
-  var Mail = (
+
+  return (
     <Salted.Layout title="Sample mail using Litmus Salted email layout">
 
       <Salted.Header>Sample mail using <a href="https://litmus.com/" target="_blank">Litmus</a> email layout</Salted.Header>
@@ -33,14 +43,37 @@ var main = function() {
 
       <Salted.TwoCol pos={pos++} />
 
-      <Salted.CompactArticle pos={pos++} />
+      <Salted.CompactArticles pos={pos++} title="List of articles">
+        {generateArticles(res)}
+      </Salted.CompactArticles>
 
-      <Salted.Footer />
+      <Salted.Footer
+        address="1234 Main Street, Anywhere, MA 01234, USA"
+        unsubscribe="Unsubscribe" unsubscribeHref=""
+        viewInBrowser="View this email in your browser" viewInBrowserHref=""
+      />
     </Salted.Layout>
   );
+};
+
+var main = function() {
+
+  var usedResources = [];
+  var resourceFinder = function(...pathTokens) {
+    var fullPath = path.join.apply(null, pathTokens);
+    var relPath = path.relative(__dirname, fullPath);
+    if (usedResources.indexOf(relPath) === -1) {
+      usedResources.push(relPath);
+    }
+    return fullPath;
+  };
+
+  var customerContext = {
+
+  };
 
   return {
-    html: Careless.renderToString(Mail, customerContext, resourceFinder),
+    html: Careless.renderToString(<Mail />, customerContext, resourceFinder),
     resources: usedResources
   }
 };
